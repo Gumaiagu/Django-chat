@@ -1,0 +1,63 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block statics %}
+    <style>
+        #singup {
+            margin: 2vw;
+        }
+
+        #login {
+            margin-right: 10px;
+        }
+
+        #title {
+            text-align: center;
+        }
+
+        #conteiner {
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%, 0%); 
+        }
+
+        #content {
+            border: .5vw solid white;
+            border-radius: 10px;
+            height: 60vh;
+            margin: auto -7vw;
+        }
+
+        .information {
+            margin-left: 2vw;
+            margin-right: 1vw;
+        };
+    </style>
+
+    <script>
+        function tell_accounts() {
+            alert("I don't have any social media");
+        };
+    </script>
+{% endblock %}
+
+{% block content %}
+    <header>
+        <a class="links" id="singup" href="{% url 'autorization:signup' %}">Singup</a>
+        <a class="links" id="login" href="{% url 'login' %}">Login</a>
+    </header>
+
+    <div id="title">
+        <h1>My chat web</h1>
+    </div>
+
+    <div id="conteiner">
+        <div id="content">
+            <p class="information">Hi, this is the home page of a personal project</p>
+            <p class="information">Take a look on my <a href="" onclick="tell_accounts()">social medias</a></p>
+        </div>
+    </div>
+{% endblock %}

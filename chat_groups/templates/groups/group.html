@@ -1,0 +1,133 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}
+    {{ group_name }}
+{% endblock %}
+
+{% block statics %}
+    <style>
+        #messages {
+            height: 67vh;
+            border: 2px solid rgb(255, 255, 255);
+            border-radius: 10px;
+            overflow: scroll;
+            order: revert;
+            background-color: rgb(107, 107, 107);
+        }
+
+        #write_and_send {
+            border-top: 1px solid white;
+            background-color: rgb(49, 49, 49);
+
+            width: 100%;
+
+            position:fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translate(-50%, 0%);
+
+            padding-top: 5px;
+        }
+
+        header {
+            text-align: start;
+        }
+
+        #block {
+            color: red;
+        };
+    </style>
+{% endblock %}
+
+{% block content %}
+    <header>
+        <a id="sing" href="{% url 'groups:group' %}">&lt;--</a>
+    </header>
+    <div id="title">
+        <h1>Welcome <span id="user-name">{{ user }}</span> to <span id="group-name">{{ group_name }}</span></h1>
+    </div>
+    <div id="messages">
+        {% for message in messages %}
+            <div>
+                <strong>{{ message.user }}</strong> send on {{ message.date|date:"M-d-Y H:i" }}:<br>
+                {{ message.content }}
+            </div>
+            <hr>
+        {% endfor %}
+    </div>
+    <div id="write_and_send">
+        <label for="message">Message</label>
+        <input id="message" type="text" name="message" placeholder="Write your message">
+        <button id="get-message" type="submit">Send</button>
+        <span id="block"></span>
+    </div>
+
+    {{ is_banned|json_script:"is-banned" }}
+    <script>
+        const user_name = document.querySelector('#user-name').innerHTML;
+        const group_name = document.querySelector('#group-name').innerHTML;
+        const roomName = group_name;
+        const is_banned = JSON.parse(document.getElementById('is-banned').textContent);
+
+        var chatSocket
+
+        console.log(window.location.href)
+        console.log(window.location.href[4])
+        if (window.location.href[4] === 's') {
+            chatSocket = new WebSocket(
+                `wss://${window.location.host}/ws/chat/${roomName}/`
+            );
+        }
+        else {
+            chatSocket = new WebSocket(
+                `ws://${window.location.host}/ws/chat/${roomName}/`
+            );
+        };
+
+
+        chatSocket.onmessage = (e) => {
+            const data = JSON.parse(e.data);
+            if (data.message.is_blocked) {
+                document.getElementById('block').innerHTML = 'You are blocked';
+                is_banned = true
+            }
+            else {
+                let message_conteiner = document.querySelector('#messages');
+                message_conteiner.innerHTML = `<div><strong>${data.message.user}</strong> send on ${data.message.date}:<br>${data.message.message}</div><hr>${message_conteiner.innerHTML}`
+            };
+        };
+
+        chatSocket.onclose = (e) => {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.querySelector('#message').focus();
+        document.querySelector('#message').onkeyup = (e) => {
+            if (e.key === 'Enter') {  // enter, return
+                document.querySelector('#get-message').click();
+            }
+        };
+
+        document.querySelector('#get-message').onclick = (e) => {
+            if (!is_banned) {
+                const messageInputDom = document.querySelector('#message');
+                const message = messageInputDom.value;
+                if (message) {
+                    chatSocket.send(JSON.stringify({
+                        'message': message,
+                        'user': user_name,
+                        'group': group_name
+                    }));
+                    messageInputDom.value = '';
+                }
+                else {
+                    throw "You can't send a null message!";
+                }
+            }
+            else {
+                document.getElementById('block').innerHTML = 'You are blocked'
+            }
+        };
+    </script>
+{% endblock %}

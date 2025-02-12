@@ -1,0 +1,80 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}
+    Groups
+{% endblock %}
+
+{% block statics %}
+    <style>
+        body {
+            font-size: 20px;
+        }
+
+        #title {
+            margin-top: 70px;
+            font-size: 20px;
+        }
+
+        #logout {
+            border: 0;
+            background-color: transparent;
+            text-decoration: underline;
+            color: white;
+        }
+
+        #logout:hover {
+            color:rgb(100, 100, 100);
+        };
+    </style>
+{% endblock %}
+
+{% block content %}
+    <header>
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button id="logout" type="submit">Log Out</button>
+        </form>
+    </header>
+    {% if user.is_authenticated %}
+        <div id="title">
+            <h1>Welcome {{ user.username }}</h1>
+        </div>
+        <h2>Create group</h2>
+
+        {% if creation_error %}
+            <p style="color: red;">{{ creation_error }}</p>
+        {% endif %}
+
+        <form action="{% url 'groups:create' %}" method="post">
+            {% csrf_token %}
+            <label for="group_name">Name</label>
+            <input type="text" placeholder="Group name" name="group_name" required><br>
+            
+            <label for="password">Password</label>
+            <input type="text" placeholder="Group password" name="password"><br>
+
+            <button type="submit">Create</button>
+        </form>
+
+        <h2>Enter in a group</h2>
+
+        {% if enter_error %}
+            <p style="color: red;">{{ enter_error }}</p>
+        {% endif %}
+
+        <form action="{% url 'groups:enter' %}" method="post">
+            {% csrf_token %}
+            <label for="group_name">Name</label>
+            <input type="text" placeholder="Group name" name="group_name" required><br>
+
+            <label for="password">Password</label>
+            <input type="text" placeholder="Group password" name="password"><br>
+
+            <button type="submit">Enter</button>
+        </form>
+    {% else %}
+        <p>You're not logged!!!</p>
+        <p>Go to <a href="{% url 'home' %}">home page</a> to continue</p>
+    {% endif %}
+{% endblock %}

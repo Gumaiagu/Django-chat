@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block statics %}
+    <style>
+        #singup {
+            font-size: 2vw;
+            margin: 2vw;
+        }
+
+        #login {
+            margin-right: 20px;
+        };
+    </style>
+{% endblock %}
+
+{% block content %}
+    <header>
+        <a class="links" id="singup" href="{% url 'autorization:signup' %}">Singup</a>
+    </header>
+    <div id="title">
+        <h2>Log In</h2>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">Log In</button>
+    </form>
+{% endblock %}
