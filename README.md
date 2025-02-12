@@ -80,3 +80,15 @@ To access admin, enter in the main page, then, add "admin/" in the URL.
 Use the user that you created to log in the admin site.
 
 Then you'll be able to manipulate the database.
+
+## Banning
+
+Banning people is a little difficult, because we need to enter in the admin page, add someone to the group called banned, and save the changes.
+
+With just a few people, it's easy to ban, but, when there's various persons, it'll be boring and difficult. I didn't add a good system for it.
+
+## Possible errors
+
+### DisallowedHost at /
+
+This error happens when you're using Ngrok (or other services) and you forgot to add the URL in the SAFE_HOST variable inside the settings.py file.
