@@ -91,4 +91,4 @@ With just a few people, it's easy to ban, but, when there's a lot of them to ban
 
 ### DisallowedHost at /
 
-This error happens when you're using Ngrok (or other services) and you forgot to add the URL in the SAFE_HOST variable inside the settings.py file, there's more details in the executing theme.
+This error happens when you're using Ngrok (or other services) and you forgot to add the URL in the SAFE_HOST variable inside the settings.py file, there's more details in the Ngrok theme.
