@@ -10,6 +10,11 @@ def defining_groups(request):
     creation_error = request.session.get('creation_error', '')
     request.session['creation_error'] = ''
 
+    user = request.user
+
+    if user != 'AnonymousUser':
+        return redirect('login')
+
     # show the page if there's a user, if there isn't the user goes to the login page
     return render(request, 'groups/group_define.html', {'creation_error': creation_error, 'enter_error': enter_error})
 
