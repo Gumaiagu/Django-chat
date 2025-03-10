@@ -10,12 +10,12 @@ First, install the libraries with:
 
 #### Unix/macOs:
 ```
-python3 -m pip install django 'channels[daphne]' channels_redis
+python3 -m pip install django 'channels[daphne]' channels_redis markupsafe
 ```
 
 #### Window:
 ```
-py -m pip install django 'channels[daphne]' channels_redis
+py -m pip install django 'channels[daphne]' channels_redis markupsafe
 ```
 
 ### Executing
@@ -25,14 +25,12 @@ To execute, use inside the main directory (the same as the "manage.py"):
 #### Unix/macOs
 
 ```
-python3 manage.py migrate
 python3 manage.py runserver
 ```
 
 #### Window
 
 ```
-py manage.py migrate
 py manage.py runserver
 ```
 

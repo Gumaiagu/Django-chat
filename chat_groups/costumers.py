@@ -1,4 +1,5 @@
 import json
+from markupsafe import escape
 
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
@@ -29,7 +30,7 @@ class ChatConsumer(WebsocketConsumer):
     # Receive message from WebSocket
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json["message"]
+        message = escape(text_data_json["message"])
         user = text_data_json["user"]
         date = dateformat.format(timezone.localtime(timezone.now()),'M-d-Y H:i')
         print(f'{message} recebido')

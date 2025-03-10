@@ -12,7 +12,7 @@ def defining_groups(request):
 
     user = request.user
 
-    if user != 'AnonymousUser':
+    if not user.is_authenticated:
         return redirect('login')
 
     # show the page if there's a user, if there isn't the user goes to the login page
@@ -62,7 +62,7 @@ def enter_group(request):
 def entred_group(request, group_name):
     user = request.user
     password = request.session.get('password', '')
-    if (Group.objects.get(name=group_name).password != password) or (not request.user.is_authenticated):
+    if (Group.objects.get(name=group_name).password != password) or (not user.is_authenticated):
         return redirect("groups:group")
 
     request.session['group_name'] = group_name
